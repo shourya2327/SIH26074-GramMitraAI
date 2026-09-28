@@ -1,0 +1,53 @@
+version: '3.8'
+
+services:
+  database:
+    image: mysql:8.0
+    container_name: grammitraai-mysql
+    restart: always
+    environment:
+      MYSQL_DATABASE: grammitraai_db
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./database/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql
+      - ./database/seed_data.sql:/docker-entrypoint-initdb.d/02-seed.sql
+
+  aiml-service:
+    build:
+      context: ./aiml
+      dockerfile: Dockerfile
+    container_name: grammitraai-aiml
+    restart: always
+    ports:
+      - "8000:8000"
+    environment:
+      - PORT=8000
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: grammitraai-backend
+    restart: always
+    ports:
+      - "8080:8080"
+    depends_on:
+      - database
+      - aiml-service
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://database:3306/grammitraai_db?useSSL=false&allowPublicKeyRetrieval=true
+      - DB_USERNAME=root
+      - DB_PASSWORD=root
+      - GRAMMITRA_AI_SERVICE_URL=http://aiml-service:8000
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: grammitraai-frontend
+    ports:
+      - "5173:5173"
+    depends_on:
+      - backend

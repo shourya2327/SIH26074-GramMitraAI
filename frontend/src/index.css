@@ -1,0 +1,196 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap');
+
+:root {
+  --color-primary-green: #4CAF50;
+  --color-dark-green: #23412A;
+  --color-light-green: #E8F5E9;
+  --color-bg: #F9FDF7;
+  --color-card-bg: #FFFFFF;
+  --color-sky-blue: #E3F2FD;
+  --color-water-rain: #E0F7FA;
+  --color-ai-purple: #F3E8FF;
+  --color-ai-accent: #7C3AED;
+  --color-temp-orange: #FFF3E0;
+  --color-orange-accent: #E65100;
+  --color-warning-yellow: #FFFDE7;
+  --color-yellow-accent: #B78103;
+  --color-danger-light: #FFEBEE;
+  --color-alert-red: #EF4444;
+  --color-wheat: #F4D35E;
+  --color-primary-text: #23412A;
+  --color-secondary-text: #64748B;
+  --color-border: #DDE8DD;
+
+  --font-main: 'Plus Jakarta Sans', 'Noto Sans Devanagari', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --shadow-sm: 0 1px 2px 0 rgba(35, 65, 42, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(35, 65, 42, 0.08), 0 2px 4px -2px rgba(35, 65, 42, 0.04);
+  --shadow-lg: 0 10px 15px -3px rgba(35, 65, 42, 0.08), 0 4px 6px -4px rgba(35, 65, 42, 0.03);
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+  --radius-full: 9999px;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-main);
+  background-color: var(--color-bg);
+  color: var(--color-primary-text);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #F1F5F0;
+}
+::-webkit-scrollbar-thumb {
+  background: #C4D9C4;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #A0C2A0;
+}
+
+/* Card & Container Utilities */
+.gm-card {
+  background: var(--color-card-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: 1.25rem;
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.gm-card:hover {
+  box-shadow: var(--shadow-md);
+}
+
+.gm-card-primary {
+  background: linear-gradient(135deg, #FFFFFF 0%, #F4FAF4 100%);
+  border: 1px solid #C8E6C9;
+}
+
+.gm-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-weight: 600;
+  font-size: 0.925rem;
+  padding: 0.65rem 1.2rem;
+  border-radius: var(--radius-sm);
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: inherit;
+}
+
+.gm-btn-primary {
+  background-color: var(--color-primary-green);
+  color: #FFFFFF;
+}
+.gm-btn-primary:hover {
+  background-color: #3d9140;
+  transform: translateY(-1px);
+}
+
+.gm-btn-outline {
+  background-color: transparent;
+  color: var(--color-dark-green);
+  border: 1px solid var(--color-border);
+}
+.gm-btn-outline:hover {
+  background-color: var(--color-light-green);
+  border-color: var(--color-primary-green);
+}
+
+.gm-btn-purple {
+  background-color: var(--color-ai-accent);
+  color: #FFFFFF;
+}
+.gm-btn-purple:hover {
+  background-color: #6d28d9;
+}
+
+.gm-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.25rem 0.65rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  border-radius: var(--radius-full);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.gm-badge-green {
+  background-color: var(--color-light-green);
+  color: var(--color-dark-green);
+}
+
+.gm-badge-blue {
+  background-color: var(--color-sky-blue);
+  color: #0284C7;
+}
+
+.gm-badge-purple {
+  background-color: var(--color-ai-purple);
+  color: var(--color-ai-accent);
+}
+
+.gm-badge-orange {
+  background-color: var(--color-temp-orange);
+  color: var(--color-orange-accent);
+}
+
+.gm-badge-red {
+  background-color: var(--color-danger-light);
+  color: var(--color-alert-red);
+}
+
+/* Leaflet container fixes */
+.leaflet-container {
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+  z-index: 10;
+}
+
+/* Animations */
+@keyframes pulseGlow {
+  0% { transform: scale(1); opacity: 0.8; }
+  50% { transform: scale(1.05); opacity: 1; }
+  100% { transform: scale(1); opacity: 0.8; }
+}
+
+.pulse-glow {
+  animation: pulseGlow 2.5s infinite;
+}
+
+@keyframes waveBar {
+  0%, 100% { height: 6px; }
+  50% { height: 24px; }
+}
+
+.wave-bar {
+  display: inline-block;
+  width: 4px;
+  background-color: var(--color-primary-green);
+  border-radius: 2px;
+  animation: waveBar 1.2s ease-in-out infinite;
+}
+.wave-bar:nth-child(2) { animation-delay: 0.2s; }
+.wave-bar:nth-child(3) { animation-delay: 0.4s; }
+.wave-bar:nth-child(4) { animation-delay: 0.1s; }
+.wave-bar:nth-child(5) { animation-delay: 0.3s; }

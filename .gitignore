@@ -1,0 +1,44 @@
+# Java
+target/
+*.class
+*.jar
+
+# Spring Boot
+*.log
+
+# Node
+node_modules/
+dist/
+build/
+.npm/
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.env
+
+# IDE
+.idea/
+.vscode/
+*.iml
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Secrets
+.env
+.env.*
+!.env.example
+
+# ML
+*.pkl
+*.joblib
+*.h5
+*.pt
+
+# Logs
+logs/
+*.log
