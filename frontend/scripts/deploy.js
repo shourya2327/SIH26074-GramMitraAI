@@ -34,7 +34,7 @@ try {
   execSync('git checkout -B gh-pages', { cwd: distDir, stdio: 'pipe' });
   execSync('git add -A', { cwd: distDir, stdio: 'pipe' });
   execSync('git commit -m "Deploy GramMitraAI to GitHub Pages"', { cwd: distDir, stdio: 'pipe' });
-  execSync('git remote add origin https://github.com/shourya2327/SIH-GramMitraAI.git', { cwd: distDir, stdio: 'pipe' });
+  execSync('git remote add origin https://github.com/shourya2327/SIH26074-GramMitraAI.git', { cwd: distDir, stdio: 'pipe' });
   
   console.log("Pushing dist directory to origin/gh-pages...");
   execSync('git push -f origin gh-pages', { cwd: distDir, stdio: 'inherit' });

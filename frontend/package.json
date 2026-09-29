@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "homepage": "https://shourya2327.github.io/SIH-GramMitraAI",
+  "homepage": "https://shourya2327.github.io/SIH26074-GramMitraAI",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
