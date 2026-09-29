@@ -7,7 +7,12 @@ export const LocationProvider = ({ children }) => {
   const [selectedLocation, setSelectedLocation] = useState(() => {
     const saved = localStorage.getItem('gm_selected_location');
     if (saved) {
-      try { return JSON.parse(saved); } catch (e) {}
+      try {
+        const parsed = JSON.parse(saved);
+        if (parsed && typeof parsed.latitude === 'number' && !isNaN(parsed.latitude) && typeof parsed.longitude === 'number' && !isNaN(parsed.longitude)) {
+          return parsed;
+        }
+      } catch (e) {}
     }
     return initialLocation;
   });

@@ -18,6 +18,8 @@ import {
   Globe
 } from 'lucide-react';
 
+const isValidCoord = (c) => typeof c === 'number' && !isNaN(c) && isFinite(c);
+
 export const InteractiveMap = ({
   height = "440px",
   showControls = true,
@@ -103,8 +105,8 @@ export const InteractiveMap = ({
     if (!mapContainerRef.current) return;
 
     if (!leafletMap.current) {
-      const initialLat = selectedLocation?.latitude || 22.9734;
-      const initialLng = selectedLocation?.longitude || 75.8267;
+      const initialLat = isValidCoord(selectedLocation?.latitude) ? selectedLocation.latitude : 22.9734;
+      const initialLng = isValidCoord(selectedLocation?.longitude) ? selectedLocation.longitude : 75.8267;
 
       const map = L.map(mapContainerRef.current, {
         center: [initialLat, initialLng],
@@ -224,14 +226,30 @@ export const InteractiveMap = ({
 
   // Update center and marker when selectedLocation changes
   useEffect(() => {
-    if (leafletMap.current && selectedLocation) {
+    if (!leafletMap.current || !selectedLocation) return;
+    const lat = selectedLocation.latitude;
+    const lng = selectedLocation.longitude;
+    if (!isValidCoord(lat) || !isValidCoord(lng)) return;
+
+    try {
       const currentCenter = leafletMap.current.getCenter();
-      const dist = Math.abs(currentCenter.lat - selectedLocation.latitude) + Math.abs(currentCenter.lng - selectedLocation.longitude);
-      if (dist > 0.0001) {
-        leafletMap.current.setView([selectedLocation.latitude, selectedLocation.longitude], leafletMap.current.getZoom() || 14);
+      if (currentCenter && isValidCoord(currentCenter.lat) && isValidCoord(currentCenter.lng)) {
+        const dist = Math.abs(currentCenter.lat - lat) + Math.abs(currentCenter.lng - lng);
+        if (dist > 0.0001) {
+          leafletMap.current.setView([lat, lng], leafletMap.current.getZoom() || 14);
+        }
+      } else {
+        leafletMap.current.setView([lat, lng], 14);
       }
-      if (markerRef.current) {
-        markerRef.current.setLatLng([selectedLocation.latitude, selectedLocation.longitude]);
+    } catch (err) {
+      console.warn("Leaflet setView safely caught:", err);
+    }
+
+    if (markerRef.current) {
+      try {
+        markerRef.current.setLatLng([lat, lng]);
+      } catch (err) {
+        console.warn("Marker setLatLng safely caught:", err);
       }
     }
   }, [selectedLocation]);
@@ -271,6 +289,7 @@ export const InteractiveMap = ({
       dynamicRiskGroupRef.current.clearLayers();
       const lat = selectedLocation.latitude;
       const lng = selectedLocation.longitude;
+      if (!isValidCoord(lat) || !isValidCoord(lng)) return;
       const locName = selectedLocation.village || selectedLocation.panchayat || "Active Farm Zone";
 
       // Center Zone Circle (Current Farm Field)
@@ -407,7 +426,9 @@ export const InteractiveMap = ({
 
   const handleConfirmSaveField = () => {
     const area = currentDrawnAcres > 0 ? currentDrawnAcres : 2.5;
-    const centerPoint = drawnPoints.length > 0 ? drawnPoints[0] : [selectedLocation.latitude, selectedLocation.longitude];
+    const fallbackLat = isValidCoord(selectedLocation?.latitude) ? selectedLocation.latitude : 22.9734;
+    const fallbackLng = isValidCoord(selectedLocation?.longitude) ? selectedLocation.longitude : 75.8267;
+    const centerPoint = drawnPoints.length > 0 ? drawnPoints[0] : [fallbackLat, fallbackLng];
 
     const newFieldObj = {
       fieldName: newFieldName,
@@ -704,7 +725,7 @@ export const InteractiveMap = ({
           </span>
         </div>
         <div style={{ color: 'var(--color-secondary-text)', fontSize: '0.72rem', marginTop: '2px' }}>
-          Lat: {selectedLocation.latitude}° N, Lon: {selectedLocation.longitude}° E • {selectedLocation.elevation_m || 520}m MSL
+          Lat: {isValidCoord(selectedLocation?.latitude) ? selectedLocation.latitude.toFixed(4) : '22.9734'}° N, Lon: {isValidCoord(selectedLocation?.longitude) ? selectedLocation.longitude.toFixed(4) : '75.8267'}° E • {selectedLocation?.elevation_m || 520}m MSL
         </div>
         <div style={{ marginTop: '6px', display: 'flex', gap: '8px', alignItems: 'center' }}>
           <button
@@ -760,7 +781,7 @@ export const InteractiveMap = ({
               🌾 Add & Save New Field
             </h3>
             <p style={{ fontSize: '0.8rem', color: 'var(--color-secondary-text)', marginBottom: '1rem' }}>
-              Location: <strong>{selectedLocation.village || selectedLocation.panchayat || "Local Farm"}</strong> ({selectedLocation.latitude}, {selectedLocation.longitude})
+              Location: <strong>{selectedLocation?.village || selectedLocation?.panchayat || "Local Farm"}</strong> ({isValidCoord(selectedLocation?.latitude) ? selectedLocation.latitude : '22.9734'}, {isValidCoord(selectedLocation?.longitude) ? selectedLocation.longitude : '75.8267'})
             </p>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
